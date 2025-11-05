@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<body>
+    YEAR: <input type="text" id="year_get"><br><br>
+    MONTH (1-12): <input type="text" id="month_get"><br>
+    <input type="button" id="subtn" value="Display Calendar" onclick="generate()"><br><br><br>
+    <div id="content"></div>
+
+<script>
+function generate() {
+    // Get user input
+    var year_get = parseInt(document.getElementById("year_get").value);
+    var month_get = parseInt(document.getElementById("month_get").value) - 1; // JS months are 0-based (0 = Jan)
+
+    if (isNaN(year_get) || isNaN(month_get) || month_get < 0 || month_get > 11) {
+        document.getElementById("content").innerHTML = "<b>Please enter a valid year and month (1-12).</b>";
+        return;
+    }
+
+    // Start building the table
+    var init_content = "<table border='1' id='calendar' cellspacing='0' cellpadding='5'>";
+    init_content += "<tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr><tr>";
+
+    // Get first day of month
+    var date = new Date(year_get, month_get, 1);
+    var firstDay = date.getDay();
+
+    // Fill empty cells before the first day
+    for (var i = 0; i < firstDay; i++) {
+        init_content += "<td></td>";
+    }
+
+    // Fill days of the month
+    while (date.getMonth() === month_get) {
+        init_content += "<td>" + date.getDate() + "</td>";
+        if (date.getDay() === 6) {
+            init_content += "</tr><tr>"; // New row on Saturday
+        }
+        date.setDate(date.getDate() + 1);
+    }
+
+    init_content += "</tr></table>";
+
+    // Display calendar
+    document.getElementById("content").innerHTML = init_content;
+}
+</script>
+</body>
+</html>
